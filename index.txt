@@ -1,0 +1,5 @@
+
+ 
+clrl + D => to select same character 
+clrl + B => to toggle side bar 
+clrl + ` => to toggle terminal

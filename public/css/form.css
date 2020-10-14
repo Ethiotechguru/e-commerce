@@ -1,0 +1,22 @@
+.form-control{
+    width: 50%;
+    background-color: black;
+    margin:20px auto;
+    text-align: center;
+    padding-bottom: 20px;
+}
+.form-control .input-container{
+    margin-bottom: 15px;
+}
+.form-control h1{
+    color:white;
+}
+
+@media screen and (max-width:380px){
+        .form-control{
+            width: 90%;
+        }
+        .form-control .form-control__input{
+            width: 90%;
+        }
+}

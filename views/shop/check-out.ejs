@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order</title>
+</head>
+<body>
+    <div>
+        <h1>Your Orders</h1>
+        <%if(orders.length>0){%>
+            <ul>
+                <%orders.forEach(order=>{%>
+                    <li>
+                        <h2><%=order.title%></h2>
+                        <p><%=order.price%></p>
+                    </li>
+                <%})%>
+            </ul>
+        <%}else{%>
+            <h1>No Order Yet!</h1>
+        <%}%>
+    </div>
+</body>
+</html>
