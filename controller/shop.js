@@ -87,7 +87,7 @@ exports.getCart = (req, res, next)=>{
     
 };
 exports.getCreateOrder =(req, res, next)=>{
-    req.user.getOrders()
+    req.user.getOrders({include:['products']})
     .then(orders=>{
         res.render('shop/check-out', {
             path:'/create-order',
@@ -122,7 +122,7 @@ exports.createOrder = (req, res, next)=>{
         return fetchCart.setProducts(null);
     })
     .then(()=>{
-        res.redirect('/cart');
+        res.redirect('/create-order');
     })
     .catch(err=>console.log(err));
 };

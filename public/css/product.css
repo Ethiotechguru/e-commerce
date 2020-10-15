@@ -39,6 +39,10 @@
     margin: 10px auto;
     border-radius: 10px;
 }
+.check-out-thumbnail{
+    width:50px;
+    border-radius: 50%;
+}
 .add-toCart-btn, .detail-link{
     padding: 8px 16px;
     background-image: linear-gradient(rgb(84, 116, 219), rgb(126, 126, 126));

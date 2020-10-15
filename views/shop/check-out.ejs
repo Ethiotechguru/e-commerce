@@ -1,19 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order</title>
+<%-include('../includes/head.ejs')%>
+   <link rel="stylesheet" href="/css/product.css">
+   
 </head>
 <body>
+  <%-include('../includes/navigation.ejs')%>
     <div>
-        <h1>Your Orders</h1>
+        
         <%if(orders.length>0){%>
+            <h1>Your Orders</h1>
             <ul>
                 <%orders.forEach(order=>{%>
                     <li>
-                        <h2><%=order.title%></h2>
-                        <p><%=order.price%></p>
+                        <h1><%=order.id%></h1><h3><%=order.createdAt%></h3>
+                        <ul>
+                            <% order.products.forEach(product => {%>
+                                <li><%=product.title%>(<%=product.orderItem.quantity%>)</li>
+                                <img class="check-out-thumbnail" src="<%=product.imageUrl%>" alt="">
+                            <%})%>
+                            
+                        </ul>
                     </li>
                 <%})%>
             </ul>
@@ -21,5 +26,4 @@
             <h1>No Order Yet!</h1>
         <%}%>
     </div>
-</body>
-</html>
+    <%-include('../includes/end.ejs')%>
