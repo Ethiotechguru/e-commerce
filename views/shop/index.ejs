@@ -18,12 +18,12 @@
                         <p class="prod-desc"><%=product.description%></p>
                         <p class="prod-price">Price: $<%=product.price%></p>
                         <div class="detail-link">
-                          <a href="product-list/<%=product.id%>">Details</a>
+                          <a href="product-list/<%=product._id%>">Details</a>
                         </div>
                         <div class="card-action">
                           <form action="/cart" method="POST">
                             <button class="add-toCart-btn">Add To Cart</button>
-                            <input type="hidden" name ="productId" value="<%=product.id%>">
+                            <input type="hidden" name ="productId" value="<%=product._id%>">
                           </form>
                         </div>
                         <hr>

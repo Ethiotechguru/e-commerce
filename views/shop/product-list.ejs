@@ -19,12 +19,12 @@
                         <hr>
                         <div class="card-action">
                           <div class="detail-link">
-                            <a href="product-list/<%=product.id%>">Details</a>
+                            <a href="product-list/<%=product._id%>">Details</a>
                           </div>
                           <div class="card-action">
                             <form action="/cart" method="POST">
                               <button class="add-toCart-btn">Add To Cart</button>
-                              <input type="hidden" name ="productId" value="<%=product.id%>">
+                              <input type="hidden" name ="productId" value="<%=product._id%>">
                             </form>
                           </div>
                         </div>
