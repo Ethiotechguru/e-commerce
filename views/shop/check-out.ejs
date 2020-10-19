@@ -11,10 +11,10 @@
             <ul>
                 <%orders.forEach(order=>{%>
                     <li>
-                        <h1><%=order.id%></h1><h3><%=order.createdAt%></h3>
+                        <h1><%=order._id%></h1><h3><%=order.createdAt%></h3>
                         <ul>
                             <% order.products.forEach(product => {%>
-                                <li><%=product.title%>(<%=product.orderItem.quantity%>)</li>
+                                <li><%=product.title%>(<%=product.quantity%>)</li>
                                 <img class="check-out-thumbnail" src="<%=product.imageUrl%>" alt="">
                             <%})%>
                             

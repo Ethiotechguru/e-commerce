@@ -2,6 +2,7 @@ const Product = require('../models/product');
 
 
 exports.getAddProduct = (req, res, next)=>{
+   
     res.render('admin/edit-product', {
         pageTitle:'Add Product', 
         path:'admin/add-product',
@@ -14,7 +15,7 @@ exports.postAddProduct =  (req, res, next)=>{
     const price = req.body.price;
     const imgUrl = req.body.imgUrl;
     const desc = req.body.description;
-    const product = new Product(title, price, imgUrl, desc, null, req.user._id);
+    const product = new Product(title, price, imgUrl, desc, null,  req.user._id);
     product.save()
     .then((result)=>{
         console.log(result);
@@ -55,7 +56,8 @@ exports.postEditProduct = (req, res, next)=>{
     const updatedDesc = req.body.description;
     const product = new Product(updatedTitle, updatedPrice, updatedImageUrl, updatedDesc, prodId);
     product.save()
-    .then(result=>{
+    .then(product=>{
+        
         console.log("product Updated");
         res.redirect('/admin/products');
     })
@@ -77,6 +79,7 @@ exports.postDeleteProduct = (req, res, next)=>{
     const prodId = req.body.productId;
     Product.deleteById(prodId)
     .then(()=>{
+        console.log(req.user);
          res.redirect('/admin/products');
      })
      .catch(err=>{

@@ -20,12 +20,14 @@ const shopRoute = require('./routes/shop');
 const errorRoute = require('./routes/404');
 
 
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next)=>{
-    User.findById("5f87f138be56cd17a659df3b").then(user=>{
-        req.user = user;
+    User.findById("5f8d2571071ea9d92600c804").then(user=>{
+        req.user = new User(user.name, user.email, user.cart, user._id);
+        // req.user = user;
         next();
     }).catch(err=>console.log(err));
 });
