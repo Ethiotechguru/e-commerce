@@ -32,12 +32,30 @@
     
     max-width: 70%;
     margin:0 auto;
+
 }
 .image{
     width: 70%;
     display:block;
     margin: 10px auto;
     border-radius: 10px;
+}
+.order-items_list{
+    padding: 20px;
+    margin:10px;
+    width: 40%;
+    background-color: rgb(108, 128, 128);
+    border-radius: 20px;
+}
+.order-detail_btn a{
+    text-decoration: none;
+    color: black;
+    padding: 5px;
+}
+.order-detail_btn{
+    padding: 5px;
+    margin: 0 70%;
+    font-size: 1.1em;
 }
 .check-out-thumbnail{
     width:50px;

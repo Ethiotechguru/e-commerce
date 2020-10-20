@@ -54,7 +54,7 @@ exports.postEditProduct = (req, res, next)=>{
     const updatedPrice = req.body.price;
     const updatedImageUrl = req.body.imgUrl;
     const updatedDesc = req.body.description;
-    const product = new Product(updatedTitle, updatedPrice, updatedImageUrl, updatedDesc, prodId);
+    const product = new Product(updatedTitle, updatedPrice, updatedImageUrl, updatedDesc, prodId, req.user._id);
     product.save()
     .then(product=>{
         

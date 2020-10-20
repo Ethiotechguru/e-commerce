@@ -55,33 +55,32 @@ exports.deleteCart = ((req,res, next)=>{
 exports.getCart = (req, res, next)=>{
     return req.user.getCart()
     .then(products =>{
-        console.log(products);
         res.render('shop/cart', {
             pageTitle:'Cart',
             path:'/cart',
             products:products
         });
-    }).catch(ere=>console.log(err));
+    }).catch(err=>console.log(err));
     
 };
-// exports.getCreateOrder =(req, res, next)=>{
-//     req.user.getOrders({include:['products']})
-//     .then(orders=>{
-//         res.render('shop/check-out', {
-//             path:'/create-order',
-//             pageTitle:'Orders',
-//             orders:orders,
-//         });
-//     })
-//     .catch(err=>{
-//         console.log(err);
-//     });
+exports.getCreateOrder =(req, res, next)=>{
+    req.user.getOrder()
+    .then(orders=>{
+        res.render('shop/check-out', {
+            path:'/create-order',
+            pageTitle:'Orders',
+            orders:orders,
+        });
+    })
+    .catch(err=>{
+        console.log(err);
+    });
    
-// };
+};
 exports.createOrder = (req, res, next)=>{
-   return req.user. addOrder()
+   return req.user.addOrder()
    .then(()=>{
-       res.redirect('/create-orders')
+       res.redirect('/');
    });
 }
 //     .then(products=>{
