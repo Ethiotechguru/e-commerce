@@ -1,0 +1,18 @@
+.login-form-control{
+    width: 50%;
+    background-color: rgb(106, 214, 228);
+    margin:20px auto;
+    text-align: center;
+    padding: 20px;
+}
+/* .login-input-container{
+    margin: 10px;
+} */
+
+.login-input-container label{
+    display: block;
+}
+.login-input-container input{
+    display:inline;
+    margin: 10px auto;
+}

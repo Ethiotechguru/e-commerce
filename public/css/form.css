@@ -3,8 +3,10 @@
     background-color: black;
     margin:20px auto;
     text-align: center;
-    padding-bottom: 20px;
+    padding: 20px;
 }
+
+
 .form-control .input-container{
     margin-bottom: 15px;
 }

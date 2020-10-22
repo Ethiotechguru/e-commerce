@@ -13,13 +13,14 @@
                     <li>
                         <h3><%=order.orderDate%></h3>
                         <ul class="order-items">
-                            <% order.items.forEach(product => {%>
+                            <% order.products.forEach(p => {%>
                                 <div class="order-items_list">
-                                    <li><%= product.title %><span> Quantity: <%=product.quantity %></span></li>
-                                    <a href="product-list/<%=product._id%>" type="hidden" name ="productId" value="<%=product._id%>">
-                                    <img class="check-out-thumbnail" src="<%=product.imageUrl%>" alt="product details"></a>
-                                    <li>Price: <%=product.price%>/unit</li>
-                                    <button class="order-detail_btn"><a href="product-list/<%=product._id%>">Detail</a></button>
+                                    <li><%= p.product.title %><span> Quantity: <%=p.quantity %></span></li>
+                                    <a href="product-list/<%=p.product._id%>">
+                                        <img class="check-out-thumbnail" src="<%=p.product.imageUrl%>" alt="product details">
+                                    </a>
+                                    <li>Price: <%=p.product.price%>/unit</li>
+                                    <button class="order-detail_btn"><a href="product-list/<%=p.product._id%>">Detail</a></button>
                                 </div>
                             <%})%>
                         </ul>
