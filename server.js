@@ -12,14 +12,9 @@ const store = new MongoDBStore({
     uri:MONGODB_URL,
     collection:'session'
 });
-// const mongoConnect = require('./util/database').mongoConnect;
+
 const User = require('./models/user');
-// const Product = require('./models/product');
-// const User = require('./models/user');
-// const Cart = require('./models/cart');
-// const CartItem = require('./models/cart-item');
-// const Order = require('./models/order');
-// const OrderItem = require('./models/order-item');
+
 
 
 app.set('view engine', 'ejs');//what view engine used
