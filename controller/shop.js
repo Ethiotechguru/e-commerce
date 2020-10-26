@@ -112,25 +112,6 @@ exports.createOrder = (req, res, next)=>{
        console.log(err);
    });
 };
-//     .then(products=>{
-//         return req.user.createOrder()
-//         .then(order=>{
-//             return order.addProducts(
-//                 products.map(product=>{
-//                     product.orderItem = {quantity:product.cartItem.quantity};
-//                     return product;
-//                 })
-//             );
-//         }).catch(err=> console.log(err));
-//     })
-//     .then(()=>{
-//         return fetchCart.setProducts(null);
-//     })
-//     .then(()=>{
-//         res.redirect('/create-order');
-//     })
-//     .catch(err=>console.log(err));
-// };
 
 exports.getProductDetail = (req, res, next)=>{
     const prodId = req.params.productId;

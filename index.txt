@@ -1,5 +1,19 @@
 
  
-clrl + D => to select same character 
-clrl + B => to toggle side bar 
-clrl + ` => to toggle terminal
+userSchema.methods.addToCart = function(product){
+    let indexOfCp = this.cart.items.findIndex(cp => {
+        return cp.productId.toString() === product._id.toString();
+    });
+    // let newQuantity = 1;
+    const updatedCartItems = [...this.cart.items];
+    if (indexOfCp >= 0) {
+        // newQuantity = this.cart.items[indexOfCp].quantity+1;
+        updatedCartItems[indexOfCp].quantity++;//newQuantity;
+    }
+    else {
+        updatedCartItems.push({ productId: product._id, quantity:1 });
+    }
+    const updatedCart = { items: updatedCartItems };
+    this.cart = updatedCart;
+    return this.save();
+};
