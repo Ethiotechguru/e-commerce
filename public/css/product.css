@@ -1,6 +1,6 @@
 .prods-container, .prods-title{
     width: 100%;
-    background-color: rgb(110, 218, 164);
+    background-color: rgb(255, 255, 255);
     margin: 0 auto;
     text-align: center;
     padding: 20px 0;
@@ -11,13 +11,18 @@
   display: block;
   background-color: black;
   color: white;
+  font-family: 'Cinzel Decorative', cursive;
 }
+.prod-title{
+    width: 60%;
+    margin: 5px auto;
+  }
 .prod-price{
     font-size: 1.3rem;
 }
 .prod-item{
     flex: 20%;
-    background-color: rgb(248, 172, 255);
+    background-color: #FFFFFF;
     margin: 10px;
     padding: 10px 2px;
     box-shadow: 2px 2px 20px rgb(116, 116, 116);

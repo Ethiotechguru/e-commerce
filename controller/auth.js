@@ -14,7 +14,7 @@ exports.postLogin=(req,res,next)=>{
         req.session.isLoggedIn = true;
         req.session.user = user;
         req.session.save(err=>{
-            res.redirect('/')
+            res.redirect('/');
         });
     });
 };

@@ -1,7 +1,7 @@
 .main-header{
     width: 100%;
     height: 3.5rem;
-    background-color:rgb(202, 142, 44);
+    background-color:rgb(47, 163, 199);
    
 }
 body,html{
@@ -30,6 +30,9 @@ body,html{
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+.logo{
+    font-family: 'Cinzel Decorative', cursive;
 }
 .main-header__item a{
     text-decoration: none;
