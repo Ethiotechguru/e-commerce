@@ -7,27 +7,28 @@
             <li class="main-header__item"><a href="/product-list" class="<%= path === '/product-list'? 'active':''%>">Products</a></li>
             <li class="main-header__item"><a href="/" class="<%= path === '/shop'? 'active':''%>">Shop</a></li>
             <%if(isAuthenticated){%>
-            <li class="main-header__item"><a href="/create-order" class="<%= path === '/create-order'? 'active':''%>">Order</a></li> 
-            <li class="main-header__item"><a href="/cart" class="<%= path === '/cart'? 'active':''%>">Cart</a></li>
-            <%}%>
-            <%if(isAuthenticated){%>
+                <li class="main-header__item"><a href="/create-order" class="<%= path === '/create-order'? 'active':''%>">Order</a></li> 
+                <li class="main-header__item"><a href="/cart" class="<%= path === '/cart'? 'active':''%>">Cart</a></li>
                 <li class="main-header__item" ><a class="<%= path==='/add-product'? 'active':''%>" href="/admin/add-product">Add product</a></li>
                 <li class="main-header__item" ><a class="<%= path==='/admin-product'? 'active':''%>" href="/admin/products">Admin Products</a></li>
             <%}%>
         </ul>
         <ul class="main-header__item-list">
             <%if(!isAuthenticated){%>
-                <li class="main-header__item"><a href="/login" class="<%=path==='/login'? 'active': ''%>">Log In</a></li>
+                <li class="main-header__item">
+                    <a href="/login" class="<%=path==='/login'? 'active': ''%>">Log In</a>
+                </li>
+                <li class="main-header__item">
+                    <a href="/signup" class="<%=path==='/signup'? 'active': ''%>">Sing Up</a>
+                </li>
             <%}else{%>
                 <li class="main-header__item">
                     <form action="/logout" method="POST">
+                        <input type="hidden" name="_csrf" value=<%=csurfToken%>>
                         <button type="submit">Log Out</button>
                     </form>
                 </li>
             <%}%>
         </ul>
-       
-        
-    
     </nav>
 </header>

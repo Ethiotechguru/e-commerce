@@ -44,13 +44,29 @@
     display:block;
     margin: 10px auto;
     border-radius: 10px;
+    
+}
+.order_history{
+    list-style: none;
+}
+._list{
+    width: 70%;
+    margin: 5px auto;
+    border: 2px solid black;
+    padding: 10px;
+    list-style: none;
+    background-color: rgb(127, 174, 206);
 }
 .order-items_list{
     padding: 20px;
-    margin:10px;
     width: 40%;
     background-color: rgb(108, 128, 128);
     border-radius: 20px;
+    margin: 10px auto;
+}
+.order-header{
+    width: 40%;
+    margin: 0 auto;
 }
 .order-detail_btn a{
     text-decoration: none;

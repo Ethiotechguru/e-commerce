@@ -2,7 +2,6 @@ const Product = require('../models/product');
 
 
 exports.getAddProduct = (req, res, next)=>{
-   
     res.render('admin/edit-product', {
         pageTitle:'Add Product', 
         path:'admin/add-product',
@@ -14,16 +13,19 @@ exports.getAddProduct = (req, res, next)=>{
 exports.postAddProduct =  (req, res, next)=>{
     const title = req.body.title;
     const price = req.body.price;
-    const imgUrl = req.body.imgUrl;
+    const imgUrl = req.body.imageUrl;
     const desc = req.body.description;
+    
     const product = new Product(
         {
             title:title,
             price:price,
             imageUrl:imgUrl,
             description:desc,
-            userId:req.session.user._id
+            // ...req.body,
+            // userId:req.session.user._id
         });
+    console.log(product);
     product.save()
     .then((result)=>{
        res.redirect('/admin/products');
@@ -35,7 +37,6 @@ exports.postAddProduct =  (req, res, next)=>{
 
 exports.getEditProduct = (req, res, next)=>{
     const editMode = req.query.edit;
-    
     if(!editMode){
         return res.redirect('/');
     }
@@ -55,7 +56,6 @@ exports.getEditProduct = (req, res, next)=>{
      })
      .catch(err=> console.log(err));
 };
-
 exports.postEditProduct = (req, res, next)=>{
     const prodId = req.body.productId;
     const updatedTitle = req.body.title;
@@ -78,7 +78,7 @@ exports.postEditProduct = (req, res, next)=>{
 };
 
 exports.adminProducts =(req,res, next)=>{
-    Product.find()
+    Product.find().sort({createdAt: -1})
     .then((products)=>{
         res.render('admin/products', {
             pageTitle:'Admin Products',

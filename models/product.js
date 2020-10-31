@@ -23,5 +23,5 @@ const productSchema = new Schema({
         ref:'User',
         require:true
     }
-});
+}, {timestamps:true});
 module.exports = mongoose.model('Product', productSchema);

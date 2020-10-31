@@ -3,7 +3,7 @@ const Product = require('../models/product');
 const Order = require('../models/order');
 
 exports.getProducts = (req,res, next)=>{
-    Product.find()
+    Product.find().sort({createdAt: -1})
     .then((products)=>{
         res.render('shop/product-list', {
             pageTitle:'Shop',
@@ -11,6 +11,7 @@ exports.getProducts = (req,res, next)=>{
             prods:products,
             hasProduct:products.length>0,
             isAuthenticated:req.session.isLoggedIn,
+            csurfToken :req.csrfToken()
         });
     })
     .catch(err=>{
@@ -19,7 +20,7 @@ exports.getProducts = (req,res, next)=>{
 };
 
 exports.getProductsList = (req, res, next)=>{
-    Product.find()
+    Product.find().sort({createdAt: -1})
     .then((products)=>{
         res.render('shop/index', {
             pageTitle:'Home',
@@ -37,13 +38,12 @@ exports.postCart = (req, res, next)=>{
     const prodId = req.body.productId;
     Product.findById(prodId)
     .then(product=>{
-       return req.user.addToCart(product);
+        return req.user.addToCart(product);
     }).then(result=>{
         res.redirect('/cart');
     }).catch(err=>{
         console.log(err);
     });
-
 };
 exports.deleteCart = (req,res, next)=>{
     const prodId = req.body.productId;
@@ -74,6 +74,7 @@ exports.getCart = (req, res, next)=>{
 exports.getCreateOrder =(req, res, next)=>{
     return Order.find({'user.userId':req.user._id})
     .then(orders=>{
+    
         res.render('shop/check-out', {
             path:'/create-order',
             pageTitle:'Orders',
@@ -92,12 +93,12 @@ exports.createOrder = (req, res, next)=>{
     .then(user =>{
         const orderDate = new Date().toDateString();
         const products = user.cart.items.map(i=>{
+            console.log(i);
             return {quantity:i.quantity, product:{...i.productId._doc}};
         });
-        
         const order = new Order({
             user:{
-                name:req.user.name,
+                email:req.user.email,
                 userId:req.user
             },
             products:products,
@@ -117,7 +118,6 @@ exports.getProductDetail = (req, res, next)=>{
     const prodId = req.params.productId;
     Product.findById(prodId)
     .then(product=>{
-        console.log(product);
         res.render('shop/product-detail', {
             pageTitle:'product-detail',
             path:'/product-list',
@@ -129,4 +129,14 @@ exports.getProductDetail = (req, res, next)=>{
         console.log(err);
     });
     
+};
+exports.deleteOrder = (req,res, next)=>{
+    const prodId = req.body.orderId;
+    console.log(prodId);
+    Order.findByIdAndDelete(prodId)
+   .then(()=>{
+       res.redirect('/create-order');
+   }).catch(err=>{
+       console.log(err);
+   });
 };

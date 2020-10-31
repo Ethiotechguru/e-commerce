@@ -1,4 +1,5 @@
-.login-form-control{
+.login-form-control,
+.signUp-form-control{
     width: 50%;
     background-color: rgb(106, 214, 228);
     margin:20px auto;
@@ -9,10 +10,12 @@
     margin: 10px;
 } */
 
-.login-input-container label{
+.login-input-container label,
+.signUp-input-container label{
     display: block;
 }
-.login-input-container input{
+.login-input-container input,
+.signUp-input-container input{
     display:inline;
     margin: 10px auto;
 }

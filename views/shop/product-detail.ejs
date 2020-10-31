@@ -16,7 +16,9 @@
             <hr>
             <div class="card-action">
               <form action="/cart" method="POST">
+                <%if(isAuthenticated){%>
                 <button class="add-toCart-btn">Add To Cart</button>
+                <%}%>
                 <input type="hidden" name ="productId" value="<%=prod._id%>">
               </form>
             </div>

@@ -4,25 +4,31 @@
 </head>
 <body>
   <%-include('../includes/navigation.ejs')%>
-    <div>
+    <div class="order-container">
         
         <%if(orders.length>0){%>
-            <h1>Your Orders</h1>
+            <h1 class="order-header">Your Orders</h1>
             <ul class="order_history">
                 <%orders.forEach(order=>{%>
                     <li>
-                        <h3><%=order.orderDate%></h3>
                         <ul class="order-items">
-                            <% order.products.forEach(p => {%>
-                                <div class="order-items_list">
-                                    <li><%= p.product.title %><span> Quantity: <%=p.quantity %></span></li>
-                                    <a href="product-list/<%=p.product._id%>">
-                                        <img class="check-out-thumbnail" src="<%=p.product.imageUrl%>" alt="product details">
-                                    </a>
-                                    <li>Price: $<%=p.product.price%>/unit</li>
-                                    <button class="order-detail_btn"><a href="product-list/<%=p.product._id%>">Detail</a></button>
-                                </div>
-                            <%})%>
+                            <div class="order-items_list">
+                                <h3><%=order.orderDate%></h3>
+                                <% order.products.forEach(p => {%>
+                                    <div class="_list" >
+                                        <li><%= p.product.title %><span> Quantity: <%=p.quantity %></span></li>
+                                        <a href="product-list/<%=p.product._id%>">
+                                            <img class="check-out-thumbnail" src="<%=p.product.imageUrl%>" alt="product details">
+                                        </a>
+                                        <li>Price: $<%=p.product.price%>/unit</li>
+                                        <button class="order-detail_btn"><a href="product-list/<%=p.product._id%>">Detail</a></button>
+                                    </div>
+                                <%})%>
+                                <form action="/delete-order" method="POST">
+                                    <input type="hidden" name='orderId' value="<%=order._id%>">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </div>
                         </ul>
                     </li>
                 <%})%>
