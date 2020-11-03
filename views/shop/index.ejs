@@ -18,10 +18,11 @@
                         <p class="prod-desc"><%=product.description%></p>
                         <p class="prod-price">Price: $<%=product.price%></p>
                         <div class="detail-link">
-                          <a href="product-list/<%=product._id%>">Details</a>
+                          <a href="product-list/<%=product._id%>/<%=product.title%>">Details</a>
                         </div>
                         <div class="card-action">
                           <form action="/cart" method="POST">
+                            <input type="hidden" name="_csrf" value="<%=csrfToken%>">
                             <%if(isAuthenticated){%>
                             <button class="add-toCart-btn">Add To Cart</button>
                             <%}%>

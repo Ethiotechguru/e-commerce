@@ -6,7 +6,7 @@ exports.getAddProduct = (req, res, next)=>{
         pageTitle:'Add Product', 
         path:'admin/add-product',
         editing:false,
-        isAuthenticated:req.session.isLoggedIn,
+        
     });
 };
 
@@ -22,10 +22,8 @@ exports.postAddProduct =  (req, res, next)=>{
             price:price,
             imageUrl:imgUrl,
             description:desc,
-            // ...req.body,
-            // userId:req.session.user._id
+            userId:req.session.user._id
         });
-    console.log(product);
     product.save()
     .then((result)=>{
        res.redirect('/admin/products');
@@ -51,7 +49,7 @@ exports.getEditProduct = (req, res, next)=>{
             path:'/edit-product',
             editing:editMode,
             product: product,
-            isAuthenticated:req.session.isLoggedIn,
+            
          });
      })
      .catch(err=> console.log(err));
@@ -60,38 +58,42 @@ exports.postEditProduct = (req, res, next)=>{
     const prodId = req.body.productId;
     const updatedTitle = req.body.title;
     const updatedPrice = req.body.price;
-    const updatedImageUrl = req.body.imgUrl;
+    const updatedImageUrl = req.body.imageUrl;
     const updatedDesc = req.body.description;
     Product.findById(prodId)
     .then(product=>{
+        if(product.userId.toString() !== req.user._id.toString()){
+            return res.redirect('/');
+        }
         product.title=updatedTitle;
         product.price=updatedPrice;
         product.imageUrl=updatedImageUrl;
         product.description=updatedDesc;
-        return product.save();
-    })
-    .then(product=>{
-        console.log("product Updated");
-        res.redirect('/admin/products');
+        return product.save()
+        .then(result=>{
+            res.redirect('/admin/products');
+        }).catch(err=>{
+            console.log(err);
+        });
     })
     .catch(err=>console.log(err));
 };
 
 exports.adminProducts =(req,res, next)=>{
-    Product.find().sort({createdAt: -1})
+    Product.find({userId:req.user._id}).sort({createdAt: -1})
     .then((products)=>{
         res.render('admin/products', {
             pageTitle:'Admin Products',
             path:'/admin-product',
             prods:products,
             hasProduct:products.length>0,
-            isAuthenticated:req.session.isLoggedIn,
+            
         });
     }).catch(err => console.log(err));
 };
 exports.postDeleteProduct = (req, res, next)=>{
     const prodId = req.body.productId;
-    Product.findByIdAndDelete(prodId)
+    Product.deleteOne({_id:prodId, userId:req.user._id})
     .then(()=>{
          res.redirect('/admin/products');
      })

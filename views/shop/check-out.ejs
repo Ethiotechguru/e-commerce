@@ -17,14 +17,15 @@
                                 <% order.products.forEach(p => {%>
                                     <div class="_list" >
                                         <li><%= p.product.title %><span> Quantity: <%=p.quantity %></span></li>
-                                        <a href="product-list/<%=p.product._id%>">
+                                        <a href="product-list/<%=p.product._id%>/<%=p.product.title%>">
                                             <img class="check-out-thumbnail" src="<%=p.product.imageUrl%>" alt="product details">
                                         </a>
                                         <li>Price: $<%=p.product.price%>/unit</li>
-                                        <button class="order-detail_btn"><a href="product-list/<%=p.product._id%>">Detail</a></button>
+                                        <button class="order-detail_btn"><a href="product-list/<%=p.product._id%>/<%=p.product.title%>">Detail</a></button>
                                     </div>
                                 <%})%>
                                 <form action="/delete-order" method="POST">
+                                    <input type="hidden" name="_csrf" value="<%=csrfToken%>">
                                     <input type="hidden" name='orderId' value="<%=order._id%>">
                                     <button type="submit">Delete</button>
                                 </form>

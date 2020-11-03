@@ -19,6 +19,7 @@
                 <div class="input-container">
                     <textarea placeholder="description" class="form-control__input" name="description" rows="5"><%if(editing){%><%= product.description %><%}%></textarea>
                 </div>
+                <input type="hidden" name="_csrf" value="<%=csrfToken%>">
                 <%if(editing){%>
                     <input type="hidden" value="<%= product._id %>" name='productId'>  
                 <%}%>

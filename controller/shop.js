@@ -1,6 +1,14 @@
 // const adminData = require('./products');
 const Product = require('../models/product');
 const Order = require('../models/order');
+const nodemailer = require('nodemailer');
+const transport = require('nodemailer-sendgrid-transport');
+
+const transporter = nodemailer.createTransport(transport({
+    auth:{
+        api_key:'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'
+    }
+}));
 
 exports.getProducts = (req,res, next)=>{
     Product.find().sort({createdAt: -1})
@@ -10,8 +18,7 @@ exports.getProducts = (req,res, next)=>{
             path:'/shop', 
             prods:products,
             hasProduct:products.length>0,
-            isAuthenticated:req.session.isLoggedIn,
-            csurfToken :req.csrfToken()
+        
         });
     })
     .catch(err=>{
@@ -27,7 +34,7 @@ exports.getProductsList = (req, res, next)=>{
             path:'/product-list', 
             prods:products,
             hasProduct:products.length>0,
-            isAuthenticated:req.session.isLoggedIn,
+        
         });
     })
     .catch(err =>{
@@ -66,7 +73,7 @@ exports.getCart = (req, res, next)=>{
             pageTitle:'Cart',
             path:'/cart',
             products:products,
-            isAuthenticated:req.session.isLoggedIn,
+        
         });
     }).catch(err=>console.log(err));
     
@@ -79,7 +86,6 @@ exports.getCreateOrder =(req, res, next)=>{
             path:'/create-order',
             pageTitle:'Orders',
             orders:orders,
-            isAuthenticated:req.session.isLoggedIn,
         });
     })
     .catch(err=>{
@@ -88,9 +94,11 @@ exports.getCreateOrder =(req, res, next)=>{
    
 };
 exports.createOrder = (req, res, next)=>{
+    let userEmail;
     return req.user.populate('cart.items.productId')
     .execPopulate()
     .then(user =>{
+        userEmail = user.email;
         const orderDate = new Date().toDateString();
         const products = user.cart.items.map(i=>{
             console.log(i);
@@ -109,6 +117,14 @@ exports.createOrder = (req, res, next)=>{
        return req.user.clearCart();
    }).then(()=>{
        res.redirect('/create-order');
+       return transporter.sendMail({
+           to:userEmail,
+           from:'samyethio891@gmail.com',
+           subject:'Thank You for shopping with Us',
+           html:"<h3>Order Confirmation</h3><p>Thank your for your order. we will notify you when your orders is shipped</p>"
+       }).catch(err=>{
+           console.log(err);
+       });
    }).catch(err=>{
        console.log(err);
    });
@@ -122,7 +138,6 @@ exports.getProductDetail = (req, res, next)=>{
             pageTitle:'product-detail',
             path:'/product-list',
             prod:product,
-            isAuthenticated:req.session.isLoggedIn,
         });
     })
     .catch(err =>{

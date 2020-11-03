@@ -7,7 +7,7 @@ const isAuth = require('../middleware/isAuth');
 router.get('/', shopController.getProducts);
 
 router.get('/product-list', shopController.getProductsList);
-router.get('/product-list/:productId', shopController.getProductDetail);
+router.get('/product-list/:productId/:productName', shopController.getProductDetail);
 router.post('/cart', shopController.postCart);
 router.post('/cart-delete-item', shopController.deleteCart);
 router.get('/cart', isAuth, shopController.getCart);

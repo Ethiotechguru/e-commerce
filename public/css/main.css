@@ -34,6 +34,18 @@ body,html{
 .logo{
     font-family: 'Cinzel Decorative', cursive;
 }
+.error_message{
+    color: red;
+    font-size: 1.3rem;
+}
+.flash-message{
+    background-color: rgb(81, 150, 216);
+    padding: 10px;
+    width: 40%;
+    margin: 10px auto;
+    border-radius: 10px;
+    border: 2px solid red;
+}
 .main-header__item a{
     text-decoration: none;
     padding-top: 20px;
