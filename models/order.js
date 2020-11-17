@@ -23,5 +23,5 @@ const orderSchema = new Schema({
         type:Schema.Types.String,
         require:true
     }
-});
+},{timestamps:true});
 module.exports = mongoose.model('Order', orderSchema);

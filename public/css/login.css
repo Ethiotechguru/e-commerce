@@ -9,7 +9,12 @@
 /* .login-input-container{
     margin: 10px;
 } */
-
+.signUp-input-container input.invalid{
+    border: 2px solid red;
+}
+.login-input-container input.invalid{
+    border: 2px solid red;
+}
 .login-input-container label,
 .signUp-input-container label{
     display: block;

@@ -1,24 +1,45 @@
 // const adminData = require('./products');
-const Product = require('../models/product');
-const Order = require('../models/order');
+const fs = require('fs');
+const path = require('path');
 const nodemailer = require('nodemailer');
 const transport = require('nodemailer-sendgrid-transport');
+const stripe = require('stripe')(process.env.SECRET_PAYMENT);
+const PDFDocument = require('pdfkit');
+
+const Product = require('../models/product');
+const Order = require('../models/order');
+
+const ITEM_PER_PAGE = 3;
 
 const transporter = nodemailer.createTransport(transport({
     auth:{
-        api_key:'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'
+        api_key:process.env.MAILER_SECRET,
     }
 }));
 
 exports.getProducts = (req,res, next)=>{
-    Product.find().sort({createdAt: -1})
+    const page = +req.query.page || 1;
+    let totalItems;
+    Product.find()
+    .countDocuments()
+    .then(numProducts=>{
+        totalItems = numProducts;
+        return Product.find().sort({createdAt: -1})
+        .skip((page-1)*ITEM_PER_PAGE)
+        .limit(ITEM_PER_PAGE);
+    })
     .then((products)=>{
         res.render('shop/product-list', {
             pageTitle:'Shop',
             path:'/shop', 
             prods:products,
             hasProduct:products.length>0,
-        
+            currentPage:page,
+            hasNextPage:ITEM_PER_PAGE*page <totalItems,
+            hasPreviousPage:page>1,
+            nextPage:page+1,
+            previousPage:page-1,
+            lastPage:Math.ceil(totalItems/ITEM_PER_PAGE)
         });
     })
     .catch(err=>{
@@ -27,14 +48,28 @@ exports.getProducts = (req,res, next)=>{
 };
 
 exports.getProductsList = (req, res, next)=>{
-    Product.find().sort({createdAt: -1})
+    const page = +req.query.page || 1;
+    let totalItems;
+    Product.find()
+    .countDocuments()
+    .then(numProducts=>{
+        totalItems = numProducts;
+        return Product.find().sort({createdAt: -1})
+        .skip((page-1)*ITEM_PER_PAGE)
+        .limit(ITEM_PER_PAGE);
+    })
     .then((products)=>{
         res.render('shop/index', {
             pageTitle:'Home',
             path:'/product-list', 
             prods:products,
             hasProduct:products.length>0,
-        
+            currentPage:page,
+            hasNextPage:ITEM_PER_PAGE*page <totalItems,
+            hasPreviousPage:page>1,
+            nextPage:page+1,
+            previousPage:page-1,
+            lastPage:Math.ceil(totalItems/ITEM_PER_PAGE)
         });
     })
     .catch(err =>{
@@ -80,9 +115,10 @@ exports.getCart = (req, res, next)=>{
 };
 exports.getCreateOrder =(req, res, next)=>{
     return Order.find({'user.userId':req.user._id})
+    .sort({createdAt:-1})
     .then(orders=>{
     
-        res.render('shop/check-out', {
+        res.render('shop/orders', {
             path:'/create-order',
             pageTitle:'Orders',
             orders:orders,
@@ -93,6 +129,41 @@ exports.getCreateOrder =(req, res, next)=>{
     });
    
 };
+exports.getCheckout = (req, res, next)=>{
+    let products;
+    let total = 0;
+    return req.user.populate('cart.items.productId')
+    .execPopulate()
+    .then(user =>{
+        products = user.cart.items;
+        total = 0;
+        products.forEach(product=>{
+            total += product.quantity * product.productId.price;
+        });
+        return stripe.checkout.sessions.create({
+            payment_method_types:['card'],
+            line_items:products.map(p=>{
+                return{
+                    name:p.productId.title,
+                    description:p.productId.description,
+                    amount:p.productId.price*100,
+                    currency:'usd',
+                    quantity:p.quantity
+                };
+            }),
+            success_url:req.protocol+'://'+req.get('host')+'/checkout/success',
+            cancel_url:req.protocol+'://'+req.get('host')+'/checkout/cancel',
+        }).then(session=>{
+            res.render('shop/checkout', {
+                pageTitle:'checkout',
+                path:'/checkout',
+                products:products,
+                totalSum:total,
+                sessionId:session.id
+            });
+        });
+    }).catch(err=>console.log(err));
+};
 exports.createOrder = (req, res, next)=>{
     let userEmail;
     return req.user.populate('cart.items.productId')
@@ -101,7 +172,6 @@ exports.createOrder = (req, res, next)=>{
         userEmail = user.email;
         const orderDate = new Date().toDateString();
         const products = user.cart.items.map(i=>{
-            console.log(i);
             return {quantity:i.quantity, product:{...i.productId._doc}};
         });
         const order = new Order({
@@ -134,6 +204,9 @@ exports.getProductDetail = (req, res, next)=>{
     const prodId = req.params.productId;
     Product.findById(prodId)
     .then(product=>{
+        if(!product){
+            res.redirect('/')
+        }
         res.render('shop/product-detail', {
             pageTitle:'product-detail',
             path:'/product-list',
@@ -155,3 +228,48 @@ exports.deleteOrder = (req,res, next)=>{
        console.log(err);
    });
 };
+
+exports.getInvoice = (req, res, next)=>{
+    const orderId = req.params.orderId;
+    Order.findById(orderId).then(order=>{
+        console.log(order);
+        if(!order){
+            return next(new Error('No order is found'));
+        }
+        if(order.user.userId.toString() !== req.user._id.toString()){
+            return next(new Error('Unauthorized User'));
+        }
+        const invoiceName = 'invoice-'+orderId+'.pdf';
+        const invoicePath = path.join('data', 'invoices', invoiceName);
+        const pdfDoc = new PDFDocument();
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 
+            'inline;filename="'+ invoiceName + '"'
+        );
+        pdfDoc.pipe(fs.createWriteStream(invoicePath));
+        pdfDoc.pipe(res);
+        pdfDoc.fontSize(26).text('Invoice',{
+            underline:true,
+        });
+        pdfDoc.fontSize(15).text('Order Number: ' + order._id)
+        pdfDoc.text('Date Ordered: ' + order.orderDate)
+        pdfDoc.text('************************');
+        order.products.forEach(prod=>{
+            pdfDoc.fontSize(12).text(`
+                ${prod.product.title} - quantity: ${prod.quantity} x $ ${prod.product.price}
+            `);
+        });
+        pdfDoc.text('------------------------------------------------------------------------------');
+       let sum = order.products.reduce((a, b)=>{
+            return a + (b.quantity * b.product.price);
+        }, 0);
+        pdfDoc.text(`
+            Total: $${sum}
+        `);
+        pdfDoc.end();
+        
+    }).catch(err=>{
+        console.log(err);
+    });
+    
+}

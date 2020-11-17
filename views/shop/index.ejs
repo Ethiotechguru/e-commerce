@@ -7,14 +7,17 @@
       <!-- <%let total = 0%> -->
         <% if(prods.length>0) {%>
           <!-- let total = 0; -->
+          
           <h2 class="prods-title">Products</h2>
             <div class='prods-container'>
                 <% for(let product of prods){%>
+                  
                   <!-- <%total = total + +product.price%> -->
                     <div class='prod-item'>
                         <hr>
+                        
                         <h3 class=prod-title><%=product.title%></h3>
-                        <img class="image" src="<%=product.imageUrl%>" alt="DSLR Camera">
+                        <img class="image" src="/<%=product.imageUrl%>" alt="DSLR Camera">
                         <p class="prod-desc"><%=product.description%></p>
                         <p class="prod-price">Price: $<%=product.price%></p>
                         <div class="detail-link">
@@ -32,9 +35,17 @@
                         <hr>
                     </div>
                 <%}%>
+               
                <!-- <h4>Total Price: <%=total%></h4> -->
             </div>
-            
+            <%-include('../includes/pagination.ejs', {
+              currentPage:currentPage, 
+              hasNextPage:hasNextPage, 
+              nextPage:nextPage, 
+              previousPage:previousPage, 
+              lastPage:lastPage, 
+              hasPreviousPage:hasPreviousPage
+            })%>
       <% } else{%>  
         <h1>No Product Found</h1>
         <h4>Total Price : 0</h4>

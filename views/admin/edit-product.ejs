@@ -6,18 +6,38 @@
     <main class="main">
         <div  class="form-control">
             <h1>My product</h1>
-            <form action="/admin/<%if(editing){%>edit-product<%}else{%>add-product<%}%>" method="POST">
+            <form action="/admin/<%if(editing){%>edit-product<%}else{%>add-product<%}%>" method="POST" enctype="multipart/form-data">
+                <%if(msg){%>
+                    <div class="error_message flash-message"><%=msg%></div>
+                <%}%>
                 <div class="input-container">
-                    <input placeholder="title" class="form-control__input" type="text" name="title" value="<%if(editing){%><%=product.title %><%}%>">
+                    <input
+                        class="<%=valErr.find(e => e.param === 'title')? 'invalid':'' %>"
+                        placeholder="title" 
+                        class="form-control__input"
+                        type="text"  name="title" 
+                        value="<%if(editing){%><%=product.title %><%}else{%><%=oldInput.title%><%}%>"
+                    >
                 </div>
                 <div class="input-container">
-                    <input placeholder="price" class="form-control__input" type="text" name="price" value="<%if(editing){%><%=product.price %><%}%>">
+                    <input
+                        class="<%=valErr.find(e => e.param === 'price')? 'invalid':'' %>"
+                        placeholder="price"
+                        class="form-control__input"
+                        type="text" name="price"
+                        value="<%if(editing){%><%=product.price %><%}else{%><%=oldInput.price%><%}%>"
+                    >
                 </div>
                 <div class="input-container">
-                    <input placeholder="Image Url" class="form-control__input" type="text" name="imageUrl" value="<%if(editing){%><%=product.imageUrl%><%}%>">
+                    <input
+                        placeholder="Image Url"
+                        class="form-control__input"
+                        type="file" name="imageUrl"
+                        
+                    >
                 </div>
                 <div class="input-container">
-                    <textarea placeholder="description" class="form-control__input" name="description" rows="5"><%if(editing){%><%= product.description %><%}%></textarea>
+                    <textarea class="<%=valErr.find(e => e.param === 'description')? 'invalid':'' %>" placeholder="description" class="form-control__input" name="description" rows="5"><%if(editing){%><%= product.description %><%}else if(oldInput.description){%><%=oldInput.description%><%}%></textarea>
                 </div>
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>">
                 <%if(editing){%>

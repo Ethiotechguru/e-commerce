@@ -5,18 +5,31 @@
     <%-include('../includes/navigation.ejs')%>
     <main class="main">
         <div  class="login-form-control">
-            <form action="/login" method="POST">
+            <form action="/login" method="POST" novalidate>
                 <%if(errorMessage.length>0){%>
                 <div class="error_message flash-message"><%=errorMessage%></div>
                 <%}%>
                 <div class="login-input-container">
                     <label for="email">Email</label>
-                    <input placeholder="user name(email)" id="email" class="form-control__input" type="email" name="email">
+                    <input
+                        class="<%=valErr.find(e => e.param === 'email')? 'invalid':'' %>"
+                        placeholder="user name(email)"
+                        id="email" class="form-control__input"
+                        type="email" name="email",
+                        value="<%=oldInput.email%>"
+                    >
                     
                 </div>
                 <div class="login-input-container">
                     <label for="password">password</label>
-                    <input placeholder="pass word" id="password" class="form-control__input" type="password" name="password">
+                    <input
+                        class="<%=valErr.find(e => e.param === 'password')? 'invalid':'' %>"
+                        placeholder="pass word"
+                        id="password"
+                        class="form-control__input"
+                        type="password" name="password"
+                        value="<%=oldInput.password%>"
+                    >
                 </div>
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>">
                 <button class="form-control__btn" type="submit">Log In</button>
